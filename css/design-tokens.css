@@ -1,0 +1,35 @@
+/* FluxType — design tokens (scalable theme layer) */
+:root {
+  /* Brand */
+  --font-brand: "Segoe UI", "Tajawal", system-ui, sans-serif;
+  --font-mono: "Cascadia Code", "Consolas", ui-monospace, monospace;
+
+  --color-bg-deep: #0b0f14;
+  --color-bg-elevated: #121a24;
+  --color-bg-panel: #182232;
+  --color-border: rgba(0, 212, 170, 0.22);
+
+  --color-accent: #00d4aa;
+  --color-accent-hover: #33e0c0;
+  --color-accent-muted: rgba(0, 212, 170, 0.35);
+  --color-text: #e8eef6;
+  --color-text-muted: #8b9cb3;
+  --color-danger: #ff6b6b;
+  --color-success: #00d4aa;
+
+  --shadow-glow: 0 0 40px rgba(0, 212, 170, 0.12);
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  --space-xs: 0.35rem;
+  --space-sm: 0.75rem;
+  --space-md: 1.25rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+
+  --transition-fast: 0.18s ease;
+  --transition-smooth: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+
+  --loader-duration: 2.6s;
+}

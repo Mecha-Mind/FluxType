@@ -1,0 +1,1129 @@
+@import url("design-tokens.css");
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-brand);
+  color: var(--color-text);
+  background: var(--color-bg-deep);
+  min-height: 100vh;
+}
+
+/* أثناء اللعب: لا تمرير لصفحة كاملة (التمرير فقط داخل عمود الكلمات إن لزم). */
+body.game-mode {
+  overflow: hidden;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* ----- App shell / screens ----- */
+.app {
+  min-height: 100vh;
+  background: radial-gradient(
+      ellipse 120% 80% at 50% -20%,
+      rgba(0, 212, 170, 0.14),
+      transparent 55%
+    ),
+    var(--color-bg-deep);
+}
+
+.screen {
+  display: none;
+  min-height: 100vh;
+  flex-direction: column;
+  animation: screenIn 0.55s var(--transition-smooth) both;
+}
+
+.screen.is-active {
+  display: flex;
+}
+
+@keyframes screenIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----- Loader ----- */
+.loader {
+  justify-content: space-between;
+  align-items: stretch;
+  padding: var(--space-lg) var(--space-md);
+}
+
+.loader__brand {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-sm);
+}
+
+.loader__title {
+  font-size: clamp(2.5rem, 12vw, 5.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  background: linear-gradient(
+    120deg,
+    var(--color-text) 0%,
+    var(--color-accent) 45%,
+    var(--color-text-muted) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: titleShine 2.2s ease-in-out infinite alternate;
+}
+
+.loader__tagline {
+  font-size: clamp(0.95rem, 3vw, 1.15rem);
+  color: var(--color-text-muted);
+  max-width: 22em;
+}
+
+@keyframes titleShine {
+  from {
+    background-position: 0% center;
+  }
+  to {
+    background-position: 100% center;
+  }
+}
+
+.loader__bar-wrap {
+  width: min(520px, 92vw);
+  margin: 0 auto var(--space-md);
+}
+
+.loader__bar-label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+  text-align: center;
+}
+
+.loader__track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  box-shadow: var(--shadow-glow);
+}
+
+.loader__fill {
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    var(--color-accent-muted),
+    var(--color-accent)
+  );
+  animation: loadBar var(--loader-duration) var(--transition-smooth) forwards;
+}
+
+@keyframes loadBar {
+  to {
+    width: 100%;
+  }
+}
+
+.loader__dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  padding-bottom: var(--space-md);
+}
+
+.loader__dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  opacity: 0.35;
+  animation: dotPulse 0.9s ease-in-out infinite;
+}
+
+.loader__dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.loader__dots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes dotPulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* ----- Menu ----- */
+.menu {
+  padding: var(--space-lg) var(--space-md);
+  align-items: center;
+  justify-content: center;
+}
+
+.menu__card {
+  width: min(440px, 100%);
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl) var(--space-lg);
+  box-shadow: var(--shadow-glow);
+}
+
+.menu__heading {
+  font-size: 1.65rem;
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+  color: var(--color-text);
+}
+
+.menu__hint {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin-bottom: var(--space-lg);
+  line-height: 1.5;
+}
+
+.menu__field {
+  margin-bottom: var(--space-md);
+}
+
+.menu__field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.menu__field input,
+.menu__field select {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-elevated);
+  color: var(--color-text);
+  font-size: 1rem;
+  font-family: var(--font-brand);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.menu__field input:focus,
+.menu__field select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-muted);
+}
+
+.menu__field select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2300d4aa' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 2.25rem;
+}
+
+.menu__btn {
+  width: 100%;
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-family: var(--font-brand);
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--color-accent), #00a884);
+  color: var(--color-bg-deep);
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+
+.menu__btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.menu__btn:active {
+  transform: translateY(0);
+}
+
+.menu__btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ----- Game ----- */
+.game {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: 100vh;
+  max-height: 100dvh;
+}
+
+.game.screen.is-active {
+  overflow: hidden;
+}
+
+.game__bar {
+  padding: var(--space-md) var(--space-md);
+  background: var(--color-bg-elevated);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.game__brand {
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  color: var(--color-accent);
+}
+
+.game__player {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.game__player strong {
+  color: var(--color-text);
+}
+
+.game__back {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-brand);
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.game__back:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.game__bar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.game__help {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-panel);
+  color: var(--color-accent);
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: var(--font-brand);
+  line-height: 1;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.game__help:hover {
+  border-color: var(--color-accent);
+  background: var(--color-bg-elevated);
+}
+
+/* صف أفقي: لوحة اللعب + aside للكلمات القادمة — بدون سكرول للصفحة */
+.game__shell {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-md);
+  min-height: 0;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+  align-items: stretch;
+}
+
+.game__main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.game__msg {
+  background: var(--color-bg-panel);
+  color: var(--color-text);
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-sm);
+  flex-shrink: 0;
+  font-weight: 600;
+  text-align: center;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  line-height: 1.5;
+  font-size: 0.92rem;
+}
+
+.game__msg .lvl,
+.game__msg .secs {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.game__msg .lvl::before,
+.game__msg .secs::before {
+  content: "{ ";
+}
+
+.game__msg .lvl::after,
+.game__msg .secs::after {
+  content: " }";
+}
+
+/* منطقة الكلمة الأساسية — أوضح وأكبر من باقي الواجهة */
+.word-stage {
+  margin: var(--space-sm) 0;
+  padding: var(--space-md);
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    165deg,
+    var(--color-bg-panel) 0%,
+    var(--color-bg-elevated) 100%
+  );
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-glow);
+  text-align: center;
+}
+
+.time-hero {
+  margin-bottom: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background: rgba(0, 212, 170, 0.08);
+  border: 1px solid var(--color-accent-muted);
+}
+
+.time-hero__label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-xs);
+}
+
+.time-hero__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.35em;
+  margin-bottom: var(--space-sm);
+}
+
+.time-hero__value {
+  font-size: clamp(2rem, 7vw, 3.25rem);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--color-accent);
+  text-shadow: 0 0 28px rgba(0, 212, 170, 0.35);
+}
+
+.time-hero__unit {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.time-hero__track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.time-hero__fill {
+  height: 100%;
+  width: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #00a884, var(--color-accent));
+  transform-origin: left center;
+  transition: width 0.08s linear;
+}
+
+.word-stage__hint {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+  line-height: 1.45;
+  flex-shrink: 0;
+}
+
+.game__word,
+.word-hero {
+  background: var(--color-bg-deep);
+  color: #f0f7ff;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+  margin: 0 auto;
+  flex-shrink: 0;
+  padding: var(--space-sm) var(--space-md);
+  font-size: clamp(1.65rem, 5.5vw, 2.85rem);
+  font-weight: 800;
+  font-family: var(--font-mono);
+  letter-spacing: 0.03em;
+  line-height: 1.15;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--color-accent);
+  user-select: none;
+  word-break: break-word;
+  box-shadow: inset 0 0 0 1px rgba(0, 212, 170, 0.25),
+    0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.input-wrap__label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--color-accent);
+  margin-bottom: var(--space-sm);
+  text-align: right;
+  letter-spacing: 0.02em;
+}
+
+.input-wrap {
+  margin-bottom: var(--space-sm);
+  margin-top: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  flex-shrink: 0;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 212, 170, 0.1) 0%,
+    var(--color-bg-panel) 35%
+  );
+  border: 2px solid var(--color-accent-muted);
+  box-shadow: var(--shadow-glow), 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.game__input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  margin: 0;
+  border: 3px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: var(--color-bg-deep);
+  color: var(--color-text);
+  caret-color: var(--color-accent);
+  box-shadow: inset 0 0 0 1px rgba(0, 212, 170, 0.2),
+    0 8px 28px rgba(0, 0, 0, 0.25);
+}
+
+.game__input:focus {
+  outline: none;
+  border-color: var(--color-accent-hover);
+  box-shadow: inset 0 0 0 1px rgba(0, 212, 170, 0.35),
+    0 0 0 3px var(--color-accent-muted), 0 12px 36px rgba(0, 0, 0, 0.3);
+}
+
+.game__input:disabled {
+  opacity: 0.5;
+}
+
+.game__input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.65;
+}
+
+/* عمود جانبي: الكلمات القادمة — تمرير داخلي للشرائح فقط */
+.game-queue-aside {
+  width: min(252px, 30vw);
+  flex-shrink: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-sm);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-glow);
+}
+
+.queue-aside__chips {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.game-queue-aside .queue__head {
+  flex-shrink: 0;
+  margin-bottom: var(--space-sm);
+}
+
+.game-queue-aside .queue__title {
+  font-size: 1rem;
+  margin-bottom: var(--space-xs);
+}
+
+.game-queue-aside .queue__explain {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  margin-bottom: var(--space-xs);
+}
+
+.game-queue-aside .queue__count {
+  font-size: 0.8rem;
+}
+
+.queue__head {
+  margin-bottom: var(--space-md);
+  text-align: right;
+}
+
+.queue__title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: var(--space-xs);
+}
+
+.queue__explain {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  margin-bottom: var(--space-sm);
+}
+
+.queue__explain strong {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.queue__count {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.queue__count span {
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.queue__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+  min-height: 2rem;
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-deep);
+  border: 1px dashed var(--color-border);
+}
+
+.queue__chips:empty::after {
+  content: "لا توجد كلمات في الانتظار بعد بدء الجولة.";
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  width: 100%;
+  text-align: center;
+  padding: var(--space-sm);
+}
+
+.queue-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--color-bg-elevated);
+  color: var(--color-text);
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  font-size: 0.88rem;
+  font-family: var(--font-mono);
+}
+
+.queue-chip__n {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--color-text-muted);
+  min-width: 1.25rem;
+  text-align: center;
+}
+
+.control {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+  font-weight: 600;
+  background: var(--color-bg-panel);
+  color: var(--color-text-muted);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.score--solo .got {
+  color: var(--color-accent);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.score--solo .total {
+  color: var(--color-text);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.game__start-wrap {
+  text-align: center;
+  margin: var(--space-xs) 0 var(--space-sm);
+  flex-shrink: 0;
+}
+
+.game__start-wrap[hidden] {
+  display: none !important;
+}
+
+.game__start {
+  cursor: pointer;
+  display: inline-block;
+  background: linear-gradient(135deg, var(--color-accent), #00a884);
+  color: var(--color-bg-deep);
+  padding: var(--space-md) var(--space-xl);
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+  border: none;
+  font-family: var(--font-brand);
+  font-size: 1rem;
+}
+
+.game__start:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+/* ----- شاشة نهاية الجولة (فوز / خسارة) كاملة الشاشة ----- */
+.game-over[hidden] {
+  display: none !important;
+}
+
+.game-over {
+  position: fixed;
+  inset: 0;
+  z-index: 9500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  background: rgba(4, 8, 14, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.game-over__panel {
+  width: min(420px, 100%);
+  padding: var(--space-xl) var(--space-lg);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+  text-align: center;
+}
+
+.game-over__badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-danger);
+  margin-bottom: var(--space-sm);
+}
+
+.game-over--win .game-over__badge {
+  color: var(--color-accent);
+}
+
+.game-over__title {
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-weight: 800;
+  margin-bottom: var(--space-sm);
+  color: var(--color-text);
+}
+
+.game-over--win .game-over__title {
+  color: var(--color-accent);
+}
+
+.game-over__sub {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  margin-bottom: var(--space-lg);
+}
+
+.game-over__scores {
+  margin-bottom: var(--space-lg);
+  text-align: right;
+}
+
+.game-over__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+.game-over__row dd {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}
+
+.game-over__row--best dd {
+  color: var(--color-accent);
+}
+
+.game-over__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.game-over__btn {
+  width: 100%;
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  font-family: var(--font-brand);
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.game-over__btn--primary {
+  background: linear-gradient(135deg, var(--color-accent), #00a884);
+  color: var(--color-bg-deep);
+}
+
+.game-over__btn--primary:hover {
+  filter: brightness(1.06);
+}
+
+.game-over__btn--ghost {
+  background: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.game-over__btn--ghost:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* ----- جولة تعريفية -----
+   أربعة أقسام مع backdrop-filter: باقي الشاشة ضبابية، الفتحة حول الهدف واضحة.
+   البطاقة بجانب الهدف + مؤشر يشير إليه. */
+.tour[hidden] {
+  display: none !important;
+}
+
+.tour:not([hidden]) {
+  display: block;
+  position: fixed;
+  inset: 0;
+  /* فوق شاشة النهاية (9500) وأي سياق آخر — الطبقة خارج .app */
+  z-index: 100000;
+  pointer-events: none;
+}
+
+.tour:not([hidden]) .tour__shade,
+.tour:not([hidden]) .tour__card {
+  pointer-events: auto;
+}
+
+.tour__shade {
+  position: fixed;
+  z-index: 100000;
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  background: rgba(6, 10, 16, 0.42);
+  transition: top 0.2s ease, left 0.2s ease, width 0.2s ease, height 0.2s ease;
+}
+
+.tour__highlight {
+  position: fixed;
+  display: none;
+  border-radius: var(--radius-md);
+  border: 3px solid var(--color-accent);
+  box-shadow: 0 0 0 1px rgba(0, 212, 170, 0.35),
+    0 0 40px rgba(0, 212, 170, 0.25);
+  z-index: 100001;
+  transition: top 0.2s ease, left 0.2s ease, width 0.2s ease, height 0.2s ease;
+  pointer-events: none;
+  background: transparent;
+}
+
+.tour__card {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  width: min(400px, calc(100vw - 2rem));
+  max-height: min(42vh, 360px);
+  overflow: auto;
+  z-index: 100002;
+  padding: var(--space-lg);
+  padding-top: calc(var(--space-lg) + 6px);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  transition: top 0.2s ease, left 0.2s ease;
+}
+
+/* مثلث يشير من البطاقة نحو المنطقة الموضحة */
+.tour__pointer {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.tour__pointer--left {
+  left: -12px;
+  top: var(--tour-arrow-y, 40%);
+  transform: translateY(-50%);
+  border-width: 11px 13px 11px 0;
+  border-color: transparent var(--color-bg-panel) transparent transparent;
+  filter: drop-shadow(-2px 0 6px rgba(0, 212, 170, 0.35));
+}
+
+.tour__pointer--right {
+  right: -12px;
+  top: var(--tour-arrow-y, 40%);
+  transform: translateY(-50%);
+  border-width: 11px 0 11px 13px;
+  border-color: transparent transparent transparent var(--color-bg-panel);
+  filter: drop-shadow(2px 0 6px rgba(0, 212, 170, 0.35));
+}
+
+.tour__pointer--top {
+  top: -12px;
+  left: var(--tour-arrow-x, 50%);
+  transform: translateX(-50%);
+  border-width: 0 11px 13px 11px;
+  border-color: transparent transparent var(--color-bg-panel) transparent;
+  filter: drop-shadow(0 -2px 6px rgba(0, 212, 170, 0.35));
+}
+
+.tour__pointer--bottom {
+  bottom: -12px;
+  left: var(--tour-arrow-x, 50%);
+  transform: translateX(-50%);
+  border-width: 13px 11px 0 11px;
+  border-color: var(--color-bg-panel) transparent transparent transparent;
+  filter: drop-shadow(0 2px 6px rgba(0, 212, 170, 0.35));
+}
+
+.game__start:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(0.2);
+  transform: none;
+}
+
+.game__start:disabled:hover {
+  filter: grayscale(0.2);
+  transform: none;
+}
+
+.tour__meta {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.tour__title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: var(--space-sm);
+  color: var(--color-text);
+}
+
+.tour__text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-md);
+}
+
+.tour__never {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-md);
+  cursor: pointer;
+  user-select: none;
+}
+
+.tour__never input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--color-accent);
+}
+
+.tour__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+}
+
+.tour__btn {
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-brand);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.tour__btn--ghost {
+  background: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.tour__btn--ghost:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.tour__btn--primary {
+  background: linear-gradient(135deg, var(--color-accent), #00a884);
+  color: var(--color-bg-deep);
+  border: none;
+}
+
+.tour__btn--primary:hover {
+  filter: brightness(1.06);
+}
+
+body.tour-open {
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .game__shell {
+    flex-direction: column;
+    padding: var(--space-xs) var(--space-sm) var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  .game-queue-aside {
+    width: 100%;
+    max-height: min(26vh, 200px);
+    order: 1;
+  }
+
+  .game__main {
+    order: 0;
+    min-height: 0;
+    flex: 1;
+  }
+}
+
+@media (max-width: 520px) {
+  .game__bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tour__actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .tour__btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

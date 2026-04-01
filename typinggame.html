@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/type.css" />
+    <title>FluxType — اختبار الطباعة السريعة</title>
+  </head>
+  <body>
+    <div class="app">
+      <!-- شاشة التحميل -->
+      <section id="screen-loader" class="screen loader is-active" aria-busy="true">
+        <div class="loader__brand">
+          <h1 class="loader__title">FluxType</h1>
+          <p class="loader__tagline">لعبة طباعة سريعة — ركّز، اكتب، تجاوز الكلمات</p>
+        </div>
+        <div class="loader__bar-wrap">
+          <p class="loader__bar-label">جاري تحميل اللعبة…</p>
+          <div class="loader__track" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+            <div class="loader__fill"></div>
+          </div>
+        </div>
+        <div class="loader__dots" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+      </section>
+
+      <!-- القائمة -->
+      <section id="screen-menu" class="screen menu" aria-hidden="true">
+        <div class="menu__card">
+          <h2 class="menu__heading">مرحباً</h2>
+          <p class="menu__hint">اكتب اسمك، اختر مستوى الصعوبة، ثم اضغط ابدأ.</p>
+          <div class="menu__field">
+            <label for="player-name">الاسم</label>
+            <input
+              id="player-name"
+              type="text"
+              maxlength="24"
+              placeholder="اكتب الاسم"
+              autocomplete="nickname"
+            />
+          </div>
+          <div class="menu__field">
+            <label for="level-select">المستوى</label>
+            <select id="level-select" name="level">
+              <option value="easy">سهل — 5 ثوانٍ لكل كلمة</option>
+              <option value="normal" selected>عادي — 3 ثوانٍ</option>
+              <option value="hard">صعب — ثانيتان</option>
+              <option value="extreme">متطرف — 1.5 ثانية</option>
+            </select>
+          </div>
+          <button type="button" class="menu__btn" id="menu-start">ابدأ اللعبة</button>
+        </div>
+      </section>
+
+      <!-- اللعبة -->
+      <section id="screen-game" class="screen game" aria-hidden="true">
+        <header class="game__bar" data-tour="header">
+          <div class="game__brand">FluxType</div>
+          <div class="game__player">اللاعب: <strong id="game-player-display">—</strong></div>
+          <div class="game__bar-actions">
+            <button type="button" class="game__help" id="game-tour-help" title="جولة تعريفية">؟</button>
+            <button type="button" class="game__back" id="game-quit">خروج للقائمة</button>
+          </div>
+        </header>
+        <div class="game__shell">
+          <div class="game__main">
+            <div class="game__msg" data-tour="level-msg">
+              أنت تلعب على مستوى
+              <span class="lvl" id="ui-lvl"></span>
+              ولديك
+              <span class="secs" id="ui-secs"></span>
+              ثانية لكتابة الكلمة التالية
+            </div>
+            <div class="game__start-wrap" id="game-start-wrap" data-tour="start-btn">
+              <button type="button" class="game__start" id="game-start">ابدأ الجولة</button>
+            </div>
+
+            <div class="word-stage" data-tour="word-block">
+              <div class="time-hero" id="time-hero" dir="ltr" aria-live="polite">
+                <span class="time-hero__label">الوقت المتبقي</span>
+                <div class="time-hero__row">
+                  <span class="time-hero__value" id="time-left">—</span>
+                  <span class="time-hero__unit">ثانية</span>
+                </div>
+                <div class="time-hero__track" aria-hidden="true">
+                  <div class="time-hero__fill" id="time-fill"></div>
+                </div>
+              </div>
+              <p class="word-stage__hint">اكتب نفس الكلمة بالضبط في الحقل أدناه</p>
+              <div class="game__word word-hero" id="word-display" dir="ltr" lang="en">ستظهر الكلمة هنا</div>
+            </div>
+
+            <div class="input-wrap" data-tour="input-wrap">
+              <label class="input-wrap__label" for="word-input">حقل الكتابة</label>
+              <input
+                type="text"
+                class="game__input"
+                id="word-input"
+                dir="ltr"
+                lang="en"
+                disabled
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                placeholder="اكتب الكلمة هنا…"
+              />
+            </div>
+
+            <div class="control" data-tour="score-row">
+              <div class="score score--solo">
+                النتيجة: <span class="got" id="score-got">0</span> من <span class="total" id="score-total"></span>
+              </div>
+            </div>
+          </div>
+
+          <aside class="game-queue-aside" data-tour="queue" aria-labelledby="queue-heading">
+            <div class="queue__head">
+              <h3 class="queue__title" id="queue-heading">الكلمات القادمة</h3>
+              <p class="queue__explain">
+                تظهر <strong>واحدة تلو الأخرى</strong>؛ الترتيب تقريبي.
+              </p>
+              <p class="queue__count"><span id="queue-count">0</span> في الانتظار</p>
+            </div>
+            <div class="queue__chips queue-aside__chips" id="upcoming-words"></div>
+          </aside>
+        </div>
+
+        <div id="game-over-overlay" class="game-over" hidden aria-hidden="true">
+          <div class="game-over__panel" role="dialog" aria-modal="true" aria-labelledby="game-over-title">
+            <p class="game-over__badge" id="game-over-badge">انتهت الجولة</p>
+            <h2 class="game-over__title" id="game-over-title">خسارتك</h2>
+            <p class="game-over__sub" id="game-over-sub"></p>
+            <dl class="game-over__scores">
+              <div class="game-over__row">
+                <dt>نتيجتك</dt>
+                <dd id="game-over-score">0</dd>
+              </div>
+              <div class="game-over__row game-over__row--best">
+                <dt>أعلى نتيجة</dt>
+                <dd id="game-over-best">0</dd>
+              </div>
+            </dl>
+            <div class="game-over__actions">
+              <button type="button" class="game-over__btn game-over__btn--primary" id="game-over-retry">
+                جولة جديدة / مرة أخرى
+              </button>
+              <button type="button" class="game-over__btn game-over__btn--ghost" id="game-over-exit">خروج للقائمة</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!--
+      الجولة التعريفية خارج .app مباشرة تحت body لتجنّب قيود containing block
+      (مثلاً transform على .screen) التي تكسر position:fixed وتخفي الطبقة.
+    -->
+    <div id="tour-overlay" class="tour" hidden>
+      <div class="tour__shade tour__shade--top" id="tour-shade-top" data-tour-shade></div>
+      <div class="tour__shade tour__shade--bottom" id="tour-shade-bottom" data-tour-shade></div>
+      <div class="tour__shade tour__shade--left" id="tour-shade-left" data-tour-shade></div>
+      <div class="tour__shade tour__shade--right" id="tour-shade-right" data-tour-shade></div>
+      <div class="tour__highlight" id="tour-highlight"></div>
+      <div class="tour__card" id="tour-card" role="dialog" aria-modal="true" aria-labelledby="tour-title">
+        <span class="tour__pointer" id="tour-pointer" aria-hidden="true"></span>
+        <div class="tour__meta" id="tour-step-label">1 / 1</div>
+        <h3 class="tour__title" id="tour-title">عنوان</h3>
+        <p class="tour__text" id="tour-text">نص</p>
+        <label class="tour__never">
+          <input type="checkbox" id="tour-never-show" />
+          لا تظهر هذه الجولة مرة أخرى
+        </label>
+        <div class="tour__actions">
+          <button type="button" class="tour__btn tour__btn--ghost" id="tour-close">إغلاق</button>
+          <button type="button" class="tour__btn tour__btn--ghost" id="tour-skip">تخطي</button>
+          <button type="button" class="tour__btn tour__btn--ghost" id="tour-prev">السابق</button>
+          <button type="button" class="tour__btn tour__btn--primary" id="tour-next">التالي</button>
+        </div>
+      </div>
+    </div>
+    <script src="js/type.js"></script>
+  </body>
+</html>
